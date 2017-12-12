@@ -1,5 +1,6 @@
 import re
 
+
 class Observer:
     def execute(self, command):
         if command[-1:] == "=":
