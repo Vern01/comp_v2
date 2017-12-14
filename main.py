@@ -14,7 +14,7 @@ def main():
             break
         command = remove.whitespace(command)
         if "=" not in command:
-            print("This is an invalid command. Please try again.")
+            print("This is an invalid command. You need to use the '=' sign.")
         elif command.endswith("?"):
             ob.execute(command[:-1])
         else:
