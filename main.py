@@ -9,7 +9,6 @@ def main():
     ob = Observer()
     while 42:
         command = input("> ")
-        print(command)
         if command == "exit":
             break
         command = remove.whitespace(command)

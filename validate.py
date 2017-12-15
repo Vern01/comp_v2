@@ -10,7 +10,7 @@ def __findall_reg(regex, string, msg):
         raise Exception
 
 
-def equation(eq, ignore):
+def equation(eq, ignore=None):
     # Not valid character
     __findall_reg("[^\w()+\-*/%=;,\[\]^.\d]", eq, "is an invalid character.")
     # variables

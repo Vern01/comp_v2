@@ -6,10 +6,30 @@ import validate
 
 class Observer:
     def __init__(self):
-        self.function_array = []
+        self.array = {
+            'func(': FunctionType("x + 1", "x")
+        }
 
-    def __replace_vars(self, equation):
-        print("hi")
+    def __get_value(self, var, param_value):
+        if not param_value:
+            return self.array[var]
+        return self.array[var].param(param_value)
+
+    def __replace_types(self, equation, param):
+        equation = equation.lower()
+        variables = re.findall("[a-z]+|[a-z]+\(\d\)", equation)
+        for variable in variables:
+            var = re.match("[a-z]+\(?", variable).group(0)
+            param_value = re.search("(?<=\()\d+(?=\))", variable)
+            if param_value:
+                param_value = param_value.group(0)
+            if var != param:
+                if var in self.array:
+                    equation = equation.replace(var, self.__get_value(variable, param_value))
+                else:
+                    print("'" + var + "' has not been defined.")
+                    raise Exception
+        return equation
 
     def execute(self, command):
         if command[-1:] == "=":
@@ -19,24 +39,26 @@ class Observer:
             self.add(command)
 
     def add(self, equation):
-        split = equation.split("=")
-        try:
+            equation = equation.lower()
+            split = equation.split("=")
+        # try:
             if len(split) > 2:
                 print("You cannot have more than one '=' sign.")
                 raise Exception
             if len(split[1]) < 1:
                 print("A variable cannot be set equal to blank.")
                 raise Exception
-            self.__replace_vars(split[1])
-            if re.match("^[a-zA-Z]+\([a-zA-Z]\)$", split[0]):
+            if re.match("^[a-z]+\([a-z]\)$", split[0]):
                 print("This is a function")
-                param = re.search("(?<=\()[a-zA-Z]+(?=\))", split[0]).group(0)
+                param = re.search("(?<=\()[a-z]+(?=\))", split[0]).group(0)
                 validate.equation(split[1], param)
-                self.function_array.append(FunctionType(split[1], param))
-            elif re.match("^[a-zA-Z]+$", split[0]):
-                validate.equation(split[1], None)
+                pure_str = self.__replace_types(split[1], param)
+                self.array[re.match("[a-z]+\(", split[0]).group(0)] = FunctionType(pure_str, param)
+            elif re.match("^[a-z]+$", split[0]):
+                validate.equation(split[1])
                 print("This is a rational number or imaginary or matrix.")
             else:
                 print("You did not give a valid variable/function name.")
-        except Exception:
-            print("Fix the error and try again. Use the up arrow key to get last command.")
+            print(self.array)
+        # except Exception:
+        #     print("Fix the error and try again. Use the up arrow key to get last command.")
