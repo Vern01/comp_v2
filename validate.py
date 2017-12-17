@@ -1,30 +1,22 @@
 import re
 
-
-def __findall_reg(regex, string, msg):
-    array = re.findall(regex, string)
-    if array:
-        array = set(array)
-        for element in array:
-            print("'" + element + "', " + msg)
-        raise Exception
+import log
+import remove
 
 
-def equation(eq, ignore):
-    # Not valid character
-    __findall_reg("[^\w()+\-*/%=;,\[\]^.\d]", eq, "is an invalid character.")
-    # variables
-    string = eq
-    if ignore:
-        string = eq.replace(ignore, "")
-    __findall_reg("[^=+\-*/%a-zA-Z]+[a-zA-Z]+|[a-zA-Z]+[^=+\-*/%a-zA-Z\^]+", string, "is an invalid variable.")
-    # Operators
-    signs = re.findall("[+\-*/%][+\-*/%]+", eq)
-    if signs and set(signs) != {'**'}:
-        for invalid in signs:
-            if invalid != "**":
-                print("'" + invalid + "' invalid use of operators.")
-            raise Exception
-    if re.search("[*/+\-][=]|[=][*/+]|[*/+\-]$", eq):
-        print("You are missing a value or you have one operator to many.")
-        raise Exception
+def equation(string):
+    non_valid = re.findall("[^a-z()\d*/%+\-=^\[\];,]+", string)
+    if non_valid:
+        log.exceptions(non_valid, "Syntax error: ")
+    if string.count('=') != 1:
+        log.exception("Make sure that there is only one '=' sign.")
+    invalid_operations = re.findall("[*/+\-%][*/+\-%]+", string)
+    invalid_operations = set(invalid_operations)
+    remove.from_array(invalid_operations, "**")
+    if invalid_operations:
+        log.exceptions(invalid_operations, "Invalid operation: ")
+    if string.count('(') != string.count(')') or string.count('[') != string.count(']'):
+        log.exception("Your parenthesis or brackets do not match up.")
+    if re.search("\(\)|\[\]"):
+        log.exception("Parenthesis and brackets are not allowed to be empty.")
+

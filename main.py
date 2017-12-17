@@ -1,24 +1,26 @@
 #!/usr/bin/env python3
 import readline
 
-from observer import Observer
 import remove
+import validate
+from maths import Math
+from memory import Memory
 
 
 def main():
-    ob = Observer()
+    memory = Memory()
+    math = Math(memory)
     while 42:
         command = input("> ")
-        print(command)
         if command == "exit":
             break
         command = remove.whitespace(command)
-        if "=" not in command:
-            print("This is an invalid command. You need to use the '=' sign.")
-        elif command.endswith("?"):
-            ob.execute(command[:-1])
+        command = command.lower()
+        validate.equation(command)
+        if command.endswith('?'):
+            math.calc(command)
         else:
-            ob.add(command)
+            memory.add_command(command)
 
 
 if __name__ == '__main__':
