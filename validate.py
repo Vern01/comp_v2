@@ -19,4 +19,3 @@ def equation(string):
         log.exception("Your parenthesis or brackets do not match up.")
     if re.search("\(\)|\[\]"):
         log.exception("Parenthesis and brackets are not allowed to be empty.")
-
