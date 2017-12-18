@@ -5,10 +5,7 @@ import log
 
 class Memory:
     def __init__(self):
-        self.array = {}
-
-# (?<=[*/+\-%])([a-z(]+[\d)]*)|([a-z(]+[\d)]*)(?=[*/+\-%])
-# (?<=[*/+\-%])([a-z(]+[\d)]*)|([a-z(]+[\d)]*)(?=[*/+\-%])
+        self.array = {'i': "i"}
 
     def __set_vars_func(self, command):
         variables = re.findall("(?<=[*/+\-%(])([a-z]+)(?=[*/+\-%)])|([a-z]+)(?=[*/+\-%]|\Z)", command)
@@ -23,7 +20,6 @@ class Memory:
         functions = re.findall("(?<=[*/+\-%(])([a-z]+\(.+\))(?=[*/+\-%)]|)|([a-z]+\(.+\))(?=[*/+\-%])", command)
         functions = set(functions)
         for func in functions:
-
             value = self.array.get(func[:func.index('(') + 1]).param(re.search("(?<=\().+(?=\))", func).group(0))
             command = command.replace(func, value)
         return command
