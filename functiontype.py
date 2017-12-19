@@ -1,14 +1,14 @@
-import simplify
+import re
 
 
 class FunctionType:
-    def __init__(self, equation, param_letter):
-        self.letter = param_letter
-        self.equation = simplify.algebra_equation(equation)
-        print("From FunctionType: eq= " + equation + "\nlet= " + param_letter)
+    def __init__(self, command):
+        self.letter = re.search("(?<=\()[a-z]+(?=\))", command[0]).group(0)
+        self.equation = command[1]
+        print("From FunctionType: eq= " + self.equation + "\nlet= " + self.letter)
 
     def __str__(self):
         return self.equation
 
     def param(self, value):
-        return value.replace(self.letter, value)
+        return self.equation.replace(self.letter, value)
