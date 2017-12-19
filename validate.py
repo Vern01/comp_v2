@@ -5,7 +5,7 @@ import remove
 
 
 def equation(string):
-    non_valid = re.findall("[^a-z()\d*/%+\-=^\[\];,]+", string)
+    non_valid = re.findall("[^a-z()\d*/%+\-=^\[\];,?]+", string)
     if non_valid:
         log.exceptions(non_valid, "Syntax error: ")
     if string.count('=') != 1:
