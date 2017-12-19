@@ -10,6 +10,7 @@ from memory import Memory
 def main():
     memory = Memory()
     math = Math(memory)
+    memory.set_math(math)
     while 42:
         command = input("> ")
         if command == "exit":
@@ -18,7 +19,7 @@ def main():
         command = command.lower()
         validate.equation(command)
         if command.endswith('?'):
-            math.calc(command)
+            math.calc(command[:-1])
         else:
             memory.add_command(command)
 
