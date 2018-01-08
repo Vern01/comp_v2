@@ -16,7 +16,6 @@ class Memory:
     def set_values(self,command, ignore=""):
         variables = re.findall("(?<=[*/+\-%(=])[a-z]+(?=[*/+\-%)^])|[a-z]+(?=[*/+\-%^=]|\Z)", command)
         variables = set(variables)
-        print("_______________________Variables Replace________________________\n", variables)
         for var in variables:
             print(var)
             if var != ignore:
@@ -26,7 +25,6 @@ class Memory:
                 command = command.replace(var, value)
         functions = re.findall("(?<=[*/+\-%(])[a-z]+\(.+\)(?=[*/+\-%)]|)|[a-z]+\(.+\)(?=[*/+\-%])", command)
         functions = set(functions)
-        print("_______________________Functions Replace________________________\n", functions)
         for func in functions:
             funct = self.array.get(func[:func.index('(') + 1])
             if not funct:
@@ -53,7 +51,6 @@ class Memory:
                 log.exception("Variable name is not allowed to be 'i'/'I'.")
             validate.var_func_names(command)
             self.array[command_split[0]] = self.set_vars_func(command_split[1])
-        print(self.array)
 
     def query(self, value):
         return self.array[value]

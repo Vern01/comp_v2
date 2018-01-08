@@ -22,6 +22,7 @@ def main():
             math.calc(command[:-1])
         else:
             memory.add_command(command)
+        print(memory.array)
 
 
 if __name__ == '__main__':
