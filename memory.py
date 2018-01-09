@@ -13,25 +13,30 @@ class Memory:
     def set_math(self, math):
         self.math = math
 
-    def set_values(self,command, ignore=""):
-        variables = re.findall("(?<=[*/+\-%(=])[a-z]+(?=[*/+\-%)^])|[a-z]+(?=[*/+\-%^=]|\Z)", command)
-        variables = set(variables)
-        for var in variables:
-            print(var)
-            if var != ignore:
-                value = self.array.get(var, None)
-                if not value:
-                    log.exception("Undefined variable: " + var)
-                command = command.replace(var, value)
-        functions = re.findall("(?<=[*/+\-%(])[a-z]+\(.+\)(?=[*/+\-%)]|)|[a-z]+\(.+\)(?=[*/+\-%])", command)
-        functions = set(functions)
-        for func in functions:
-            funct = self.array.get(func[:func.index('(') + 1])
-            if not funct:
-                log.exception("Function is not defined, " + func)
-            value = funct.param(re.search("(?<=\().+(?=\))", func).group(0))
-            command = command.replace(func, value)
-        return command
+    def set_values(self, command, ignore=""):
+        values = []
+        split_values = re.findall("[*/+-]?[^*/+-]+", command)
+
+
+# ___________________________________________old_set_value_________________________________________________
+#     variables = re.findall("(?<=[*/+\-%(=])[a-z]+(?=[*/+\-%)^])|[a-z]+(?=[*/+\-%^=]|\Z)", command)
+#     variables = set(variables)
+#     for var in variables:
+#         if var != ignore:
+#             value = self.array.get(var, None)
+#             if not value:
+#                 log.exception("Undefined variable: " + var)
+#             command = command.replace(var, value)
+#     functions = re.findall("(?<=[*/+\-%(])[a-z]+\(.+\)(?=[*/+\-%)]|)|[a-z]+\(.+\)(?=[*/+\-%])", command)
+#     functions = set(functions)
+#     for func in functions:
+#         funct = self.array.get(func[:func.index('(') + 1])
+#         if not funct:
+#             log.exception("Function is not defined, " + func)
+#         value = funct.param(re.search("(?<=\().+(?=\))", func).group(0))
+#         command = command.replace(func, value)
+#     return command
+#                                     ______________end______________
 
     def set_vars_func(self, command, ignore=""):
         command = self.math.calc(command, ignore)
